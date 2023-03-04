@@ -57,21 +57,22 @@ use mongodb::options::ClientOptions;
 async fn main() {
     // mongo_sync().unwrap();
     let port = 8083;
-    let server = net::TcpListener::bind(format!("localhost:{port}")).unwrap();
-    printf!("[ HTTP ] Server started on port {}", port);
+    let server = net::TcpListener::bind(format!("127.0.0.1:{port}")).unwrap();
+    println!("[ TCP ] Server started on {} with port {}", server.local_addr().unwrap().ip(), port);
 
     loop {
         let (mut tcp_stream, sock_addr) = server.accept().unwrap();
-        println!("new tcp_stream client: {tcp_stream:?}");
+        println!("[ TCP ] new tcp_stream client: {tcp_stream:?}");
 
-        // time::SystemTime::now()
-        let mut data = "HTTP/1.1 200 OK\nContent-Type: text/html\nServer: Rust\n
-                <h2>Hello from Rust</h2>".as_bytes();
+        // let system_time = time::SystemTime::now();
+        let mut data = "HTTP/1.1 200 OK\nContent-Type: text/html\nServer: Rust\n<h2>Hello from Rust</h2>"
+            .as_bytes();
 
         let addr = tcp_stream.local_addr().unwrap();
-        println!("Address: {:?}", addr);
+        println!("[ TCP ] Address: {:?}", addr);
 
         tcp_stream.write_all(data).expect("Could not write to client socket 😎 ");
+        tcp_stream
     }
 }
 
