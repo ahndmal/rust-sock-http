@@ -64,15 +64,19 @@ async fn main() {
         let (mut tcp_stream, sock_addr) = server.accept().unwrap();
         println!("[ TCP ] new tcp_stream client: {tcp_stream:?}");
 
+        let ip_addr = sock_addr.ip();
+
+        println!("{}", ip_addr);
+
         // let system_time = time::SystemTime::now();
-        let mut data = "HTTP/1.1 200 OK\nContent-Type: text/html\nServer: Rust\n<h2>Hello from Rust</h2>"
+        let mut data = "HTTP/1.1 200 OK\nContent-Type: text/html\r\n\n<h2>Hello from Rust</h2>"
             .as_bytes();
 
         let addr = tcp_stream.local_addr().unwrap();
         println!("[ TCP ] Address: {:?}", addr);
 
         tcp_stream.write_all(data).expect("Could not write to client socket 😎 ");
-        tcp_stream
+
     }
 }
 
